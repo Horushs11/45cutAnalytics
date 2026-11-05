@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Download, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Avatar } from '../../components/shared/Avatar';
 import { EmptyState } from '../../components/shared/EmptyState';
 import { SearchField, SelectField } from '../../components/shared/FilterControls';
@@ -38,7 +39,7 @@ export function PlayersPage() {
     <PageHeader eyebrow="PLAYER INTELLIGENCE" title="Player explorer" description={`Busca, filtra y compara el rendimiento individual durante la temporada ${season}.`}
       actions={<button type="button" className="button button--secondary" onClick={onExport} disabled={!filtered.length}><Download size={16}/> Exportar CSV</button>}/>
     <div className="workspace-panel">
-      <div className="workspace-panel__heading"><div><div className="title-with-icon"><Users size={20}/><h2>Base de jugadores</h2></div><p>{formatInt(filtered.length)} resultados de {formatInt(players.length)} jugadores</p></div><span className="data-tag">SEASON {season}</span></div>
+      <div className="workspace-panel__heading"><div><div className="title-with-icon"><Users size={20}/><h2>Base de jugadores</h2></div><p>{formatInt(filtered.length)} resultados de {formatInt(players.length)} jugadores · Pulsa un nombre para abrir su perfil</p></div><span className="data-tag">SEASON {season}</span></div>
       <div className="filters-row">
         <div className="filter-search"><SearchField value={search} onChange={setSearch} placeholder="Buscar jugador o equipo..."/></div>
         <SelectField label="Filtrar equipo" value={team} onChange={setTeam} options={[{value:'all',label:'Todos los equipos'},...teamOptions.map(name => ({value:name,label:name}))]}/>
@@ -49,7 +50,7 @@ export function PlayersPage() {
         <th className="col-rank">#</th><th>Jugador</th><th>Equipo</th><th className="numeric">PJ</th><th className="numeric">MIN</th><th className="numeric">PTS</th><th className="numeric">REB</th><th className="numeric">AST</th><th className="numeric">eFG%</th><th className="numeric">TS%</th><th className="numeric">USG%</th>
       </tr></thead><tbody>{filtered.map((player, index) => <tr key={`${player.id}-${player.teamId}`}>
         <td className="col-rank">{String(index + 1).padStart(2, '0')}</td>
-        <td><div className="table-person"><Avatar name={player.name} small/><strong>{player.name}</strong></div></td>
+        <td><Link className="table-person text-link" to={`/players/${player.id}`}><Avatar name={player.name} small/><strong>{player.name}</strong></Link></td>
         <td className="muted-cell">{player.teamName || '—'}</td><td className="numeric">{formatInt(player.games)}</td>
         <td className="numeric">{formatNumber(player.minutes)}</td><td className="numeric high-cell">{formatNumber(player.pointsPerGame)}</td>
         <td className="numeric">{formatNumber(player.reboundsPerGame)}</td><td className="numeric">{formatNumber(player.assistsPerGame)}</td>

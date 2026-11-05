@@ -3,7 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
 import { OverviewPage } from '../features/overview/OverviewPage';
 import { PlayersPage } from '../features/players/PlayersPage';
+import { PlayerProfilePage } from '../features/players/PlayerProfilePage';
+import { DataExplorerPage } from '../features/explorer/DataExplorerPage';
 import { TeamsPage } from '../features/teams/TeamsPage';
+import { TeamProfilePage } from '../features/teams/TeamProfilePage';
 import { GamesPage } from '../features/games/GamesPage';
 import { ComparePage } from '../features/compare/ComparePage';
 import { useLeagueData } from '../hooks/useLeagueData';
@@ -15,7 +18,10 @@ export function App() {
   return <Routes><Route element={<AppShell data={data}/> }>
     <Route index element={<OverviewPage/>} />
     <Route path="players" element={<PlayersPage/>} />
+    <Route path="players/:playerId" element={<PlayerProfilePage/>} />
+    <Route path="explorer" element={<DataExplorerPage/>} />
     <Route path="teams" element={<TeamsPage/>} />
+    <Route path="teams/:teamId" element={<TeamProfilePage/>} />
     <Route path="games" element={<GamesPage/>} />
     <Route path="compare" element={<ComparePage/>} />
   </Route><Route path="*" element={<Navigate to="/" replace/>}/></Routes>;

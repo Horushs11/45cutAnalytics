@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Activity, ArrowUpRight, CircleHelp, GitCompareArrows, Github, LayoutDashboard, Menu, Shield, Trophy, Users, X } from 'lucide-react';
+import { Activity, ArrowUpRight, CircleHelp, Database, GitCompareArrows, Github, LayoutDashboard, Menu, Shield, Trophy, Users, X } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import type { LeagueData } from '@45cut/shared';
 import { DataNotice } from '../shared/DataNotice';
@@ -7,13 +7,14 @@ import { DataNotice } from '../shared/DataNotice';
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/players', label: 'Jugadores', icon: Users },
+  { to: '/explorer', label: 'Data Explorer', icon: Database },
   { to: '/teams', label: 'Equipos', icon: Shield },
   { to: '/games', label: 'Partidos', icon: Trophy },
   { to: '/compare', label: 'Comparador', icon: GitCompareArrows },
 ];
 
 const titles: Record<string, string> = {
-  '/': 'Dashboard', '/players': 'Jugadores', '/teams': 'Equipos', '/games': 'Partidos', '/compare': 'Comparador',
+  '/': 'Dashboard', '/players': 'Jugadores', '/explorer': 'Data Explorer', '/teams': 'Equipos', '/games': 'Partidos', '/compare': 'Comparador',
 };
 
 export function AppShell({ data }: { data: LeagueData }) {
@@ -28,7 +29,7 @@ export function AppShell({ data }: { data: LeagueData }) {
       <div className="sidebar__section-label">WORKSPACE</div>
       <nav className="side-nav" aria-label="Navegación principal">
         {links.map(({ to, label, icon: Icon, end }) => <NavLink key={to} to={to} end={end} onClick={() => setOpen(false)} className={({ isActive }) => `side-nav__item ${isActive ? 'side-nav__item--active' : ''}`}>
-          <Icon size={19} strokeWidth={1.9}/><span>{label}</span>{to === '/compare' && <span className="nav-new">NEW</span>}
+          <Icon size={19} strokeWidth={1.9}/><span>{label}</span>
         </NavLink>)}
       </nav>
       <div className="sidebar__grow" />
@@ -38,8 +39,8 @@ export function AppShell({ data }: { data: LeagueData }) {
     </aside>
     <div className="main-shell">
       <div className="topbar">
-        <div className="topbar__left"><button type="button" className="icon-button menu-button" aria-label="Abrir menú" onClick={() => setOpen(true)}><Menu size={20}/></button><span className="topbar__workspace">WORKSPACE</span><span className="topbar__separator">/</span><span>{titles[location.pathname] ?? '45CUT Analytics'}</span></div>
-        <div className="topbar__right"><span className="local-pill"><span className="online-dot" />LOCAL</span><a href="https://github.com/Horushs11" target="_blank" rel="noreferrer" className="icon-button" aria-label="Abrir GitHub"><Github size={19}/></a></div>
+        <div className="topbar__left"><button type="button" className="icon-button menu-button" aria-label="Abrir menú" onClick={() => setOpen(true)}><Menu size={20}/></button><span className="topbar__workspace">WORKSPACE</span><span className="topbar__separator">/</span><span>{titles[location.pathname] ?? (location.pathname.startsWith('/players/') ? 'Perfil de jugador' : location.pathname.startsWith('/teams/') ? 'Perfil de equipo' : '45CUT Analytics')}</span></div>
+        <div className="topbar__right"><span className="local-pill"><span className="online-dot" />LOCAL</span><a href="https://github.com/Horushs11/45cutAnalytics" target="_blank" rel="noreferrer" className="icon-button" aria-label="Abrir GitHub"><Github size={19}/></a></div>
       </div>
       <main className="content"><DataNotice data={data}/><Outlet context={data}/>
         <footer className="main-footer"><span>© 2026 45CUT Analytics · Local first</span><span>Designed for data exploration <ArrowUpRight size={13}/></span></footer>
