@@ -1,0 +1,19 @@
+{
+  "name": "45cut-analytics",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c blue,magenta \"npm run dev -w @45cut/api\" \"npm run dev -w @45cut/web\"",
+    "build": "npm run build -w @45cut/web",
+    "typecheck": "npm run typecheck -w @45cut/api && npm run typecheck -w @45cut/web",
+    "test": "npm run test -w @45cut/api",
+    "start:api": "npm run start -w @45cut/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "^5.8.3"
+  },
+  "engines": {"node": ">=20.19.0"}
+}

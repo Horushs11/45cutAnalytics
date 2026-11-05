@@ -1,0 +1,41 @@
+/*
+ * 45CUT Design Tokens
+ * Change the custom properties in :root to establish your own visual identity.
+ * Layout, components and data access are intentionally separate.
+ */
+:root {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: dark;
+  --bg: #0a1018;
+  --sidebar: #0c141e;
+  --surface: #111b26;
+  --surface-2: #151f2c;
+  --surface-3: #1d2a38;
+  --border: #223040;
+  --border-strong: #304153;
+  --text: #eff3f8;
+  --muted: #92a0b0;
+  --dim: #65768a;
+  --accent: #f2a74b;
+  --accent-2: #f4c78b;
+  --accent-bg: rgba(242,167,75,.1);
+  --blue: #6d97c5;
+  --success: #67cd99;
+  --danger: #ed828c;
+  --radius: 13px;
+  --shadow: 0 6px 26px rgba(0,0,0,.1);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+html { min-width: 320px; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+button, input, select { font: inherit; }
+button, select { cursor: pointer; }
+a { text-decoration: none; color: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+::selection { background: rgba(242, 167, 75, .27); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
