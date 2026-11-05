@@ -39,7 +39,7 @@ export function AppShell({ data }: { data: LeagueData }) {
     </aside>
     <div className="main-shell">
       <div className="topbar">
-        <div className="topbar__left"><button type="button" className="icon-button menu-button" aria-label="Abrir menú" onClick={() => setOpen(true)}><Menu size={20}/></button><span className="topbar__workspace">WORKSPACE</span><span className="topbar__separator">/</span><span>{titles[location.pathname] ?? (location.pathname.startsWith('/players/') ? 'Perfil de jugador' : '45CUT Analytics')}</span></div>
+        <div className="topbar__left"><button type="button" className="icon-button menu-button" aria-label="Abrir menú" onClick={() => setOpen(true)}><Menu size={20}/></button><span className="topbar__workspace">WORKSPACE</span><span className="topbar__separator">/</span><span>{titles[location.pathname] ?? (location.pathname.startsWith('/players/') ? 'Perfil de jugador' : location.pathname.startsWith('/teams/') ? 'Perfil de equipo' : '45CUT Analytics')}</span></div>
         <div className="topbar__right"><span className="local-pill"><span className="online-dot" />LOCAL</span><a href="https://github.com/Horushs11/45cutAnalytics" target="_blank" rel="noreferrer" className="icon-button" aria-label="Abrir GitHub"><Github size={19}/></a></div>
       </div>
       <main className="content"><DataNotice data={data}/><Outlet context={data}/>

@@ -37,3 +37,26 @@
 .explorer-loading { color: var(--accent); font-size: 11px; padding: 10px 24px; }
 @media (max-width: 1050px) { .profile-grid { grid-template-columns: 1fr; } }
 @media (max-width: 700px) { .profile-stats { grid-template-columns: repeat(2,minmax(0,1fr)); } .profile-attributes { grid-template-columns: repeat(2,minmax(0,1fr)); } .profile-top { padding: 15px; } .profile-heading { padding: 18px 15px; } .profile-heading select { min-width: 100px; } .explorer-search { flex-wrap: wrap; } .explorer-search button { width: 100%; } .explorer-pagination { flex-wrap: wrap; } }
+
+/* Team profiles */
+.team-profile-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.team-profile-mark { width: 64px; height: 64px; display: inline-grid; place-items: center; border: 1px solid var(--border-strong); border-radius: 14px; color: var(--accent); background: var(--surface-3); }
+.team-metric-key { display: block; font-size: 9px; margin-top: 6px; color: var(--dim); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+.team-games-list { border-top: 1px solid var(--border); }
+.team-game { border-bottom: 1px solid var(--border); }
+.team-game-header { width: 100%; display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 25px; align-items: center; padding: 18px 24px; border: 0; text-align: left; background: transparent; color: var(--text); }
+.team-game-header:hover { background: var(--surface-2); }
+.team-game-match { display: grid; gap: 6px; min-width: 0; }
+.team-game-match strong { font-size: 12px; overflow-wrap: anywhere; }
+.team-game-match small { color: var(--muted); font-size: 10px; }
+.team-game-score { font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; }
+.team-game-more { display: inline-flex; gap: 6px; align-items: center; color: var(--accent); font-size: 11px; font-weight: 700; }
+.team-game-details { padding: 0 4px 20px; }
+.team-game-details h3 { font-size: 12px; color: var(--accent-2); padding: 12px 24px 6px; margin: 8px 0; }
+.team-profile-bottom { padding: 18px 24px 0; }
+@media (max-width: 700px) {
+  .team-game-header { gap: 10px; padding: 15px; grid-template-columns: minmax(0,1fr) auto; }
+  .team-game-score { font-size: 14px; }
+  .team-game-more { grid-column: 1 / -1; justify-self: end; }
+  .team-profile-actions { width: 100%; }
+}

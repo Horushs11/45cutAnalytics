@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, Download, Database } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../components/shared/PageHeader';
 import { SearchField, SelectField } from '../../components/shared/FilterControls';
 import { displayValue, getExplorerData, type AnalyticsRow } from '../../lib/analytics';
@@ -19,13 +19,16 @@ const views = [
 const limit = 50;
 
 export function DataExplorerPage() {
-  const [view, setView] = useState('player_season');
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+  const requestedView = urlSearchParams.get('view') ?? '';
+  const view = views.some(item => item.value === requestedView) ? requestedView : 'player_season';
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [offset, setOffset] = useState(0);
   const [visibleColumns, setVisibleColumns] = useState<string[] | null>(null);
   const [showColumns, setShowColumns] = useState(false);
   const [sort, setSort] = useState<{ key: string; desc: boolean } | null>(null);
+  useEffect(() => { setOffset(0); setSearch(''); setSearchInput(''); setVisibleColumns(null); setSort(null); }, [view]);
   const { data, error, isFetching } = useQuery({
     queryKey: ['explorer', view, offset, search],
     queryFn: () => getExplorerData(view, offset, search, limit),
@@ -44,7 +47,7 @@ export function DataExplorerPage() {
     });
     return list;
   }, [data, view, sort]);
-  const changeView = (next: string) => { setView(next); setOffset(0); setSearch(''); setSearchInput(''); setVisibleColumns(null); setSort(null); };
+  const changeView = (next: string) => { setUrlSearchParams({ view: next }); setOffset(0); setSearch(''); setSearchInput(''); setVisibleColumns(null); setSort(null); };
   const submitSearch = (event: React.FormEvent) => { event.preventDefault(); setOffset(0); setSearch(searchInput); };
   const onExport = () => exportCsv(`45cut-${view}-page.csv`, rows.map(row => Object.fromEntries(shownColumns.map(column => [column, displayValue(row[column])])) as Record<string, string>));
   const toggleColumn = (column: string) => {
@@ -71,6 +74,10 @@ export function DataExplorerPage() {
       <div className="table-scroll"><table className="data-table explorer-table"><thead><tr>{shownColumns.map(column => <th key={column}><button className="explorer-sort" onClick={() => setSort(prev => ({ key: column, desc: prev?.key === column ? !prev.desc : false }))}>{column} {sort?.key === column ? (sort.desc ? '↓' : '↑') : ''}</button></th>)}</tr></thead>
         <tbody>{rows.map((row: AnalyticsRow, index) => <tr key={index}>{shownColumns.map(column => <td key={column}>{column === 'player_name' && row.player_id != null
           ? <Link className="text-link" to={`/players/${row.player_id}`}>{displayValue(row[column])}</Link>
+          : column === 'team' && row.team_id != null
+          ? <Link className="text-link" to={`/teams/${row.team_id}`}>{displayValue(row[column])}</Link>
+          : column === 'opponent' && row.opponent_id != null
+          ? <Link className="text-link" to={`/teams/${row.opponent_id}`}>{displayValue(row[column])}</Link>
           : displayValue(row[column])}</td>)}</tr>)}</tbody></table></div>
       {!isFetching && !rows.length && !error && <p className="profile-loading">No hay registros para esta búsqueda.</p>}
       <div className="table-footer explorer-pagination"><span>{total ? `${offset + 1}–${Math.min(offset + limit, total)} de ${total}` : '0 resultados'} · Ordenación sobre la página actual</span>

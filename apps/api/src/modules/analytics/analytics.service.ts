@@ -44,6 +44,30 @@ export async function getPlayerProfile(playerId: number) {
   };
 }
 
+export async function getTeamProfile(teamId: number) {
+  const db = requireDatabase();
+  const [season, games] = await Promise.all([
+    db.query(
+      `SELECT * FROM ${schema}."team_season"
+       WHERE season = $1 AND team_id = $2
+       LIMIT 1`,
+      [environment.season, teamId],
+    ),
+    db.query(
+      `SELECT * FROM ${schema}."team_game"
+       WHERE season = $1 AND team_id = $2
+       ORDER BY date ASC NULLS LAST, round ASC, game_id ASC`,
+      [environment.season, teamId],
+    ),
+  ]);
+  if (!season.rows.length) return null;
+  return {
+    season: environment.season,
+    team: season.rows[0],
+    games: games.rows,
+  };
+}
+
 const searchColumns: Record<AnalyticsView, string[]> = {
   player_45cut_score: ['player_name', 'team', 'opponent'],
   player_game: ['player_name', 'team', 'opponent'],

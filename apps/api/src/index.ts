@@ -1,7 +1,7 @@
 import express from 'express';
 import { environment } from './config/environment.js';
 import { loadLeagueData } from './modules/league/league.service.js';
-import { exploreView, getPlayerProfile, VIEWS } from './modules/analytics/analytics.service.js';
+import { exploreView, getPlayerProfile, getTeamProfile, VIEWS } from './modules/analytics/analytics.service.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -41,6 +41,26 @@ app.get('/api/players/:id/profile', async (request, response) => {
   } catch (error) {
     console.error('Player profile request failed:', error);
     response.status(500).json({ message: 'No se pudo cargar el perfil del jugador.' });
+  }
+});
+
+app.get('/api/teams/:id/profile', async (request, response) => {
+  response.setHeader('Cache-Control', 'no-store');
+  const id = Number(request.params.id);
+  if (!Number.isSafeInteger(id) || id < 1) {
+    response.status(400).json({ message: 'ID de equipo no válido.' });
+    return;
+  }
+  try {
+    const profile = await getTeamProfile(id);
+    if (!profile) {
+      response.status(404).json({ message: 'Equipo no encontrado en esta temporada.' });
+      return;
+    }
+    response.json(profile);
+  } catch (error) {
+    console.error('Team profile request failed:', error);
+    response.status(500).json({ message: 'No se pudo cargar el perfil del equipo.' });
   }
 });
 
